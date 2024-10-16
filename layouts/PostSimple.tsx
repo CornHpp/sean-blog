@@ -42,7 +42,7 @@ export function PostSimple(props: PostSimpleLayoutProps) {
                 {children}
               </div>
               <div className="border-t border-gray-200 dark:border-gray-700">
-                <SocialButtons postUrl={postUrl} title={title} fileName={fileName} />
+                {/* <SocialButtons postUrl={postUrl} title={title} fileName={fileName} /> */}
                 <Comments frontMatter={frontMatter} config={commentConfig} />
               </div>
             </div>

@@ -23,12 +23,12 @@ export function BlogLinks() {
           My snippets collection
         </span>
       </Link> */}
-      <Link href="/about" className="hover:underline">
+      {/* <Link href="/about" className="hover:underline">
         <Twemoji emoji="face-with-monocle" />
         <span data-umami-event="home-link-about" className="ml-1.5">
           More about me and myself
         </span>
-      </Link>
+      </Link> */}
       {/* <Link href="/resume" className="hover:underline">
         <Twemoji emoji="briefcase" />
         <span data-umami-event="home-link-resume" className="ml-1.5">

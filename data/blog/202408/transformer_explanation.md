@@ -3,7 +3,7 @@ title: "🤩 Understanding How Transformers Work"
 date: '2024-10-05'
 tags: ['Blog', 'Code Life']
 draft: false
-# summary: '好久没有打开我的老博客了，今天突然发现访问量突破了一百万，借此机会聊聊我的代码人生 …'
+summary: 'Transformers are a type of deep learning model that revolutionized the field of natural language processing (NLP) and beyond. Introduced in the paper ["Attention is All You Need"](https://arxiv.org/abs/1706.03762) by Vaswani et al. in 2017, transformers utilize a mechanism called **self-attention** to process input data in a highly parallel and efficient manner, unlike traditional sequence models like RNNs (Recurrent Neural Networks) and LSTMs (Long Short-Term Memory networks).'
 authors: ['default']
 ---
 

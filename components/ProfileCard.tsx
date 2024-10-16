@@ -68,9 +68,9 @@ export function ProfileCard() {
             aspectRatio: '17/11',
           }}
         />
-        <SpotifyNowPlaying />
+        {/* <SpotifyNowPlaying /> */}
         <ProfileCardInfo />
-        <span className="h-1.5 bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"></span>
+        <span className="h-1.5 bg-[#729426]"></span>
       </div>
     </div>
   )

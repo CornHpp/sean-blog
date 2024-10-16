@@ -111,12 +111,12 @@ export function ProfileCardInfo() {
             <span className="text-gray-400 dark:text-gray-500">|</span>
             <a
               target="_blank"
-              href={siteMetadata.juejin}
+              href={siteMetadata.twitter}
               rel="noreferrer"
               className="hover:underline"
               data-umami-event="profile-card-juejin"
             >
-              juejin/{siteMetadata.socialAccounts.juejin}
+              x/{siteMetadata.socialAccounts.twitter}
             </a>
             {/* <span className="text-gray-400 dark:text-gray-500">|</span>
             <a
