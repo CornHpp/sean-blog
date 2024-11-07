@@ -8,6 +8,11 @@ module.exports = {
     './data/(blog|snippets|authors)/*.mdx',
   ],
   darkMode: 'class',
+
+  preflight: {
+    // 配置需要排除的选择器
+    ignoredClasses: ['.ant-*'], // 排除所有 antd 相关的类
+  },
   theme: {
     extend: {
       gridTemplateColumns: {
