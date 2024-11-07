@@ -53,7 +53,7 @@ export default function PostBlog() {
       })
   }
   const handleFileChange = (e: React.ChangeEvent) => {
-    const file = e.target.files?.[0]
+    const file = (e.target as HTMLInputElement).files?.[0]
     if (file) {
       const formData = new FormData()
       formData.append('file', file)
