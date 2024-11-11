@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react'
+import { postBlogAPI } from '~/api/postBlog'
 import { PageSeo } from '~/components/SEO'
 import { POSTS_PER_PAGE } from '~/constant'
 import { siteMetadata } from '~/data/siteMetadata'
 import { ListLayout } from '~/layouts/ListLayout'
 import { getAllFilesFrontMatter } from '~/libs/mdx'
-import type { BlogListProps } from '~/types'
+import type { BlogFrontMatter, BlogListProps } from '~/types'
 
 export function getStaticProps() {
   const posts = getAllFilesFrontMatter('blog')
@@ -16,7 +18,18 @@ export function getStaticProps() {
   return { props: { posts, initialDisplayPosts, pagination } }
 }
 
-export default function Blog({ posts, initialDisplayPosts, pagination }: BlogListProps) {
+export default function Blog({ initialDisplayPosts, pagination }: BlogListProps) {
+  const [posts, setPosts] = useState<BlogFrontMatter[]>([])
+
+  const getAllMarkdown = () => {
+    postBlogAPI.getAllBlogs().then((res) => {
+      console.log(res)
+      setPosts(res?.data || [])
+    })
+  }
+  useEffect(() => {
+    getAllMarkdown()
+  }, [])
   return (
     <>
       <PageSeo
@@ -25,7 +38,7 @@ export default function Blog({ posts, initialDisplayPosts, pagination }: BlogLis
       />
       <ListLayout
         posts={posts}
-        initialDisplayPosts={initialDisplayPosts}
+        initialDisplayPosts={posts}
         pagination={pagination}
         title="All Posts"
       />

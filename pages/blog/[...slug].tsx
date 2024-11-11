@@ -1,54 +1,36 @@
-import fs from 'fs'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { postBlogAPI } from '~/api/postBlog'
 import { MDXLayoutRenderer } from '~/components/MDXComponents'
 import { PageTitle } from '~/components/PageTitle'
-import { POSTS_PER_PAGE } from '~/constant'
-import { getCommentConfigs } from '~/libs/comment'
-import { formatSlug, getFiles } from '~/libs/files'
-import { generateRss } from '~/libs/generate-rss'
-import { getAllFilesFrontMatter, getFileBySlug } from '~/libs/mdx'
-import type { AuthorFrontMatter, BlogProps, MdxPageLayout } from '~/types'
+import type { BlogProps } from '~/types'
 
-const DEFAULT_LAYOUT: MdxPageLayout = 'PostSimple'
+const DEFAULT_LAYOUT = 'PostSimple'
 
-export async function getStaticPaths() {
-  const posts = getFiles('blog')
-  return {
-    paths: posts.map((p: string) => ({
-      params: {
-        slug: formatSlug(p).split('/'),
-      },
-    })),
-    fallback: false,
-  }
-}
-
-export async function getStaticProps({ params }: { params: { slug: string[] } }) {
-  const allPosts = getAllFilesFrontMatter('blog')
-  const postIndex = allPosts.findIndex((post) => formatSlug(post.slug) === params.slug.join('/'))
-  const prev = allPosts[postIndex + 1] || null
-  const next = allPosts[postIndex - 1] || null
-  const page = Math.ceil((postIndex + 1) / POSTS_PER_PAGE)
-  const post = await getFileBySlug('blog', params.slug.join('/'))
-
-  const authors = post.frontMatter.authors || ['default']
-  const authorDetails = await Promise.all(
-    authors.map(async (author) => {
-      const authorData = await getFileBySlug('authors', author)
-      // eslint-disable-next-line
-      return authorData.frontMatter as unknown as AuthorFrontMatter
+export default function Blog() {
+  const [loading, setLoading] = useState(true)
+  const [blogData, setBlogData] = useState<BlogProps | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const fetchBlogData = async () => {
+    const slug = window.location.pathname.split('/blog/')[1]
+    console.log('slug', slug)
+    postBlogAPI.getBlogById(slug).then((res) => {
+      console.log('res', res)
+      setBlogData(res)
+      setLoading(false)
     })
-  )
+  }
 
-  // rss
-  const rss = generateRss(allPosts)
-  fs.writeFileSync('./public/feed.xml', rss)
-  const commentConfig = getCommentConfigs()
+  useEffect(() => {
+    fetchBlogData()
+  }, [])
 
-  return { props: { post, authorDetails, prev, next, page, commentConfig } }
-}
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error}</div>
+  if (!blogData) return <div>No blog found</div>
 
-export default function Blog(props: BlogProps) {
-  const { post, ...rest } = props
+  const { post, ...rest } = blogData
   const { mdxSource, frontMatter } = post
 
   return (
@@ -64,7 +46,7 @@ export default function Blog(props: BlogProps) {
       ) : (
         <div className="mt-24 text-center">
           <PageTitle>
-            Under letruction{' '}
+            Under Construction{' '}
             <span role="img" aria-label="roadwork sign">
               🚧
             </span>

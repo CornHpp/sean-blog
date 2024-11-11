@@ -1,13 +1,14 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { postBlogAPI } from '~/api/postBlog'
 export default function PostBlog() {
   const [form, setForm] = useState({
     title: '',
     date: '',
     summary: '',
     authors: '',
-    markdown: '',
+    markdownId: '',
+    tags: '',
   })
 
   const handleSubmit = () => {
@@ -28,17 +29,17 @@ export default function PostBlog() {
       toast.error('Please enter the authors')
       return
     }
-    if (!form.markdown) {
+    if (!form.markdownId) {
       toast.error('Please enter the markdown')
       return
     }
-    console.log(form)
-    axios
-      .post('/api/blog/createBlog', {
+    postBlogAPI
+      .createBlog({
         title: form.title,
         summary: form.summary,
         authors: form.authors,
-        markdown: form.markdown,
+        markdownId: form.markdownId,
+        tags: form.tags?.split(','),
       })
       .then((res) => {
         console.log(res)
@@ -47,7 +48,8 @@ export default function PostBlog() {
           date: '',
           summary: '',
           authors: '',
-          markdown: '',
+          markdownId: '',
+          tags: '',
         })
         toast.success('Blog created successfully')
       })
@@ -57,30 +59,11 @@ export default function PostBlog() {
     if (file) {
       const formData = new FormData()
       formData.append('file', file)
-      axios
-        .post('/api/upload/markdown', formData)
-        .then((res) => {
-          console.log(res)
-          // Update the form state with the uploaded markdown content
-          console.log(res.data.file)
-          setForm((prevForm) => ({ ...prevForm, markdown: res.data.file }))
-        })
-        .catch((error) => {
-          console.error('Error uploading file:', error)
-        })
+      postBlogAPI.uploadMarkdown(formData).then((res) => {
+        setForm((prevForm) => ({ ...prevForm, markdownId: res?.id }))
+      })
     }
   }
-  const getAllMarkdown = () => {
-    axios
-      .get('https://1111-4dcei80av-onlyheartt9s-projects.vercel.app/api/blog/test')
-      .then((res) => {
-        console.log(res)
-      })
-  }
-
-  useEffect(() => {
-    getAllMarkdown()
-  }, [])
 
   return (
     <div className="w-[800px] mx-auto mt-[20px]">
@@ -91,7 +74,7 @@ export default function PostBlog() {
         <input
           type="text"
           className="w-[300px] h-[30px] border border-gray-300 leading-[20px] px-[10px] "
-          placeholder="you@example.com"
+          placeholder="please enter the article title"
           value={form.title}
           onChange={(e) => setForm({ ...form, title: e.target.value })}
         />
@@ -111,7 +94,7 @@ export default function PostBlog() {
         <input
           type="text"
           className="w-[300px] h-[30px] border border-gray-300 leading-[20px] px-[10px] "
-          placeholder="summary"
+          placeholder="please enter the article summary"
           value={form.summary}
           onChange={(e) => setForm({ ...form, summary: e.target.value })}
         />
@@ -121,9 +104,19 @@ export default function PostBlog() {
         <input
           type="text"
           className="w-[300px] h-[30px] border border-gray-300 leading-[20px] px-[10px] "
-          placeholder="authors"
+          placeholder="default is Sean"
           value={form.authors}
           onChange={(e) => setForm({ ...form, authors: e.target.value })}
+        />
+      </div>
+      <div className="flex mt-[40px] ">
+        <div className="text-xl font-bold w-[100px]">Tags</div>
+        <input
+          type="text"
+          className="w-[300px] h-[30px] border border-gray-300 leading-[20px] px-[10px] "
+          placeholder="请输入tag，用逗号隔开"
+          value={form.tags}
+          onChange={(e) => setForm({ ...form, tags: e.target.value })}
         />
       </div>
 

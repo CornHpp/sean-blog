@@ -7,15 +7,15 @@ import type { ListLayoutProps } from '~/types'
 export function ListLayout(props: ListLayoutProps) {
   let { posts, title, initialDisplayPosts = [], pagination } = props
   let [searchValue, setSearchValue] = useState('')
-  let filteredBlogPosts = posts.filter((frontMatter) => {
-    let searchContent = frontMatter.title + frontMatter.summary + frontMatter.tags.join(' ')
-    return searchContent.toLowerCase().includes(searchValue.toLowerCase())
-  })
+  // let filteredBlogPosts = posts.filter((frontMatter) => {
+  //   let searchContent = frontMatter?.title + frontMatter?.summary + frontMatter?.tags?.join(' ')
+  //   return searchContent?.toLowerCase().includes(searchValue?.toLowerCase())
+  // })
 
+  // console.log(filteredBlogPosts)
   // If initialDisplayPosts exist, display it if no searchValue is specified
-  let displayPosts =
-    initialDisplayPosts.length > 0 && !searchValue ? initialDisplayPosts : filteredBlogPosts
-
+  let displayPosts = initialDisplayPosts.length > 0 && !searchValue ? initialDisplayPosts : []
+  console.log(displayPosts)
   return (
     <>
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -30,15 +30,15 @@ export function ListLayout(props: ListLayoutProps) {
           <PostsSearch onChange={setSearchValue} />
         </div>
         <ul className="space-y-10 py-12">
-          {!filteredBlogPosts.length && 'No posts found.'}
+          {/* {!filteredBlogPosts.length && 'No posts found.'} */}
           {displayPosts.map((frontMatter) => (
             <PostListItem key={frontMatter.slug} frontMatter={frontMatter} />
           ))}
         </ul>
       </div>
-      {pagination && pagination.totalPages > 1 && !searchValue && (
+      {/* {pagination && pagination.totalPages > 1 && !searchValue && (
         <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
-      )}
+      )} */}
     </>
   )
 }
