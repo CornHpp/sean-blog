@@ -5,21 +5,39 @@ import { postBlogAPI } from '~/api/postBlog'
 import { MDXLayoutRenderer } from '~/components/MDXComponents'
 import { PageTitle } from '~/components/PageTitle'
 import type { BlogProps } from '~/types'
-
+import { serialize } from 'next-mdx-remote/serialize'
+import { MDXRemote } from 'next-mdx-remote'
+import remarkGfm from 'remark-gfm'
 const DEFAULT_LAYOUT = 'PostSimple'
+
+async function serializeMarkdown(markdownString: string) {
+  if (!markdownString) return null
+
+  return await serialize(markdownString, {
+    mdxOptions: {
+      remarkPlugins: [remarkGfm], // 添加 remarkGfm 支持
+      rehypePlugins: [],
+    },
+  })
+}
 
 export default function Blog() {
   const [loading, setLoading] = useState(true)
-  const [blogData, setBlogData] = useState<BlogProps | null>(null)
+  const [blogData, setBlogData] = useState<any>('')
   const [error, setError] = useState<string | null>(null)
   const fetchBlogData = async () => {
     const slug = window.location.pathname.split('/blog/')[1]
-    console.log('slug', slug)
-    postBlogAPI.getBlogById(slug).then((res) => {
-      console.log('res', res)
-      setBlogData(res)
-      setLoading(false)
-    })
+    const res = await postBlogAPI.getBlogById(slug)
+    console.log(res)
+    setLoading(false)
+    if (res?.markdown) {
+      const mdxSource = await serializeMarkdown(res.markdown)
+      console.log('mdxSource', mdxSource)
+      setBlogData({
+        ...res,
+        mdxSource,
+      })
+    }
   }
 
   useEffect(() => {
@@ -31,11 +49,15 @@ export default function Blog() {
   if (!blogData) return <div>No blog found</div>
 
   const { post, ...rest } = blogData
-  const { mdxSource, frontMatter } = post
 
   return (
     <>
-      {frontMatter.draft !== true ? (
+      <div></div>
+
+      <div className="prose">
+        <MDXRemote {...blogData.mdxSource} />
+      </div>
+      {/* {frontMatter.draft !== true ? (
         <MDXLayoutRenderer
           layout={frontMatter.layout || DEFAULT_LAYOUT}
           mdxSource={mdxSource}
@@ -51,8 +73,7 @@ export default function Blog() {
               🚧
             </span>
           </PageTitle>
-        </div>
-      )}
+        </div> */}
     </>
   )
 }

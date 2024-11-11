@@ -8,7 +8,6 @@ export class Api {
   protected async get(api: string, { errorName }: Option) {
     try {
       const res = await request.get(api)
-      console.log('res', res)
       if (res?.status != 200 && res?.status != 201) {
         toast.error(res?.data)
         return Promise.reject(res)
