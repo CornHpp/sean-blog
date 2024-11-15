@@ -32,10 +32,10 @@ module.exports = withBundleAnalyzer({
         destination: 'https://raw.githubusercontent.com/:path*',
         locale: false,
       },
-      {
-        source: '/api/:path*',
-        destination: 'https://1111-d2w31hczg-onlyheartt9s-projects.vercel.app/:path*',
-      },
+      // {
+      //   source: '/api/:path*',
+      //   destination: 'https://1111-d2w31hczg-onlyheartt9s-projects.vercel.app/api/:path*',
+      // },
     ]
   },
   typescript: { tsconfigPath: './tsconfig.json' },

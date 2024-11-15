@@ -1,12 +1,11 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
-
-//https://infomon-api-staging-v2.azurewebsites.net
-// https://infomon-api-prod.azurewebsites.net
+// http://localhost:5000/api/
+// https://1111-1245595765-qqcom-onlyheartt9s-projects.vercel.app
 export const baseURL =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:5000/api/'
-    : 'https://infomon-api-staging-v2.azurewebsites.net/api'
+    : 'https://1111-hipb4qyij-onlyheartt9s-projects.vercel.app/api/'
 
 export const request = axios.create({
   baseURL,
