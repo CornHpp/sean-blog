@@ -1,6 +1,6 @@
-import axios from 'axios'
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
+import { postBlogAPI } from '~/api/postBlog'
 export default function Subscribe() {
   const [email, setEmail] = useState('')
 
@@ -13,9 +13,7 @@ export default function Subscribe() {
       toast.error('Please enter a valid email')
       return
     }
-    console.log(email)
-    axios.post('/api/mailer/subscribe', { email }).then((res) => {
-      console.log(res)
+    postBlogAPI.subscribe({ email }).then((res) => {
       setEmail('')
       toast.success('Subscribed successfully')
     })

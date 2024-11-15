@@ -14,6 +14,7 @@ module.exports = {
     'next/core-web-vitals',
   ],
   rules: {
+    'no-useless-escape': 'off',
     'prettier/prettier': 'off',
     'react/react-in-jsx-scope': 'off',
     'jsx-a11y/anchor-is-valid': [
